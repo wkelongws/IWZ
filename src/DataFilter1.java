@@ -10,6 +10,8 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 import java.net.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.conf.*;
@@ -85,8 +87,20 @@ String line = value.toString();
 			String[] nodes = line.split(",");
 						
 			String date = nodes[1];
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        	try {
+				Date date1 = sdf.parse(date);
+				Date refdate = sdf.parse("06/22/2016");
+				if(date1.after(refdate)){context.write(NullWritable.get(), value);}
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 						
-			if(date.equals("date")){context.write(NullWritable.get(), value);}
+			
 			
 		} // End method "map"
 		
